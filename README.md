@@ -11,14 +11,21 @@
 ### Options that are implemented :
 
 -a : All files are printed. By default, tree does not print hidden files.
+
 -d : List directories only.
---ignore-case : If a match pattern is specified by the -P or -I option, this will cause the pattern to match without regards to the case of each letter.
+
 –filelimit # : Do not descend directories that contain more than # entries.
+
 -o file name : Send output to file name.
+
 -u : Print the username, or UID # if no username is available, of the file.
+
 -s : Print the size of each file along with the name.
+
 -t : Sort the output by last modification time instead of alphabetically.
+
 -r : Sort the output in reverse alphabetic order.
+
 -J : Turn on JSON output. Outputs the directory tree as an JSON formatted array.
 
 
