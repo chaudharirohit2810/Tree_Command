@@ -1,0 +1,3 @@
+. [0m[16 entries file limit, not opening dir]
+
+0 Directories, 0 Files
