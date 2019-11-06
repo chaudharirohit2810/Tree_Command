@@ -1,6 +1,6 @@
-#Tree Command in Linux
+# Tree Command in Linux
 
-###Tree command implementation using c : 
+### Tree command implementation using c : 
 
 --tree is a recursive directory listing program that produces a depth-indented listing of files.
 --With no arguments, tree lists the files in the current directory.
@@ -8,7 +8,7 @@
 --Upon completion of listing all files and directories found, tree returns the total number of files and directories listed.
 --There are options to change the characters used in the output, and to use color output.
 
-###Options that are implemented :
+### Options that are implemented :
 
 -a : All files are printed. By default, tree does not print hidden files.
 -d : List directories only.
