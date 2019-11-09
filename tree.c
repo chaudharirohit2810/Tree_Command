@@ -35,7 +35,6 @@ node* insert_node(node* root, char* name, int level, int reverse_toggle, int tim
 		root = start_new_tree(name, level);
 		root->rec->is_directory = 1;
 	}
-
         int n, i;
         char* path = (char*)malloc(1024);
 	//Struct dirent contains all the information regarding file
@@ -92,6 +91,26 @@ node* insert_node(node* root, char* name, int level, int reverse_toggle, int tim
 	return root;
 }
 
+node* destroy_tree(node* root, node* parent) {
+	int i = 0;
+	if(root == NULL) {
+		return NULL;
+	}	
+	int temp = root->rec->num_all_childs;
+	for(i = 0; i < temp; i++) {
+		root->pointers[i] = destroy_tree(root->pointers[i], root);
+	}
+	if(root->rec->num_all_childs == 0) {
+		if(parent == NULL) {
+			free(root);
+			return NULL;
+		}
+		free(root);
+		parent->rec->num_all_childs--;
+		return NULL;
+	}
+	return NULL;	
+}
 //To get the file size
 long get_file_size(char* path) {
         struct stat stats;

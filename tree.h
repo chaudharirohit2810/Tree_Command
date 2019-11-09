@@ -36,6 +36,9 @@ typedef struct node {
 //To Insert the nodes in tree
 node* insert_node(node* , char*, int, int , int );
 
+//To destroy the tree after the use
+node* destroy_tree(node* , node* );
+
 //To get the file size 
 long get_file_size(char* );
 

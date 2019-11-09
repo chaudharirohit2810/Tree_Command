@@ -9,6 +9,9 @@
 // Variables to calculate number of directories and files
 int D = 0, F = 0;
 
+
+
+
 // To give color to file according to its extension
 int colorChecker(char* name) {
 
@@ -33,7 +36,7 @@ int colorChecker(char* name) {
 }
 
 // To print the tree
-void print_normal(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void print_normal(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit,int P_toggle, char* pattern) {
 	int i;
 	if (root == NULL)
 		return;
@@ -57,18 +60,36 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("%s\u2503   ", NRM);
-					printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
-					if (colorChecker(root->rec->name) == 2) {
-						printf("%s%s\n", GRN, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 3) {
-						printf("%s%s\n", MAGENTA, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 4) {
-						printf("%s%s\n", RED, root->rec->name);
-					} else {
-						printf("%s%s\n", NRM, root->rec->name);
+					if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
 					}
 				}
 			}
@@ -92,19 +113,37 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 					printf("[%s\t]%s%s ", root->rec->username, BLUE, root->rec->name);
 				}
 			} else {
-				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("%s\u2503   ", NRM);
-					printf("%s%s[%s\t]  ", NRM, STR, root->rec->username);
-					if (colorChecker(root->rec->name) == 2) {
-						printf("%s%s\n", GRN, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 3) {
-						printf("%s%s\n", MAGENTA, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 4) {
-						printf("%s%s\n", RED, root->rec->name);
-					} else {
-						printf("%s%s\n", NRM, root->rec->name);
+				if(root->rec->name[0] != '.') { 
+					if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[%s\t]", NRM, STR, root->rec->username);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[%s\t]", NRM, STR, root->rec->username);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
 					}
 				}
 			}
@@ -128,19 +167,37 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 					printf("[   %ld]%s%s ", root->rec->size, BLUE, root->rec->name);
 				}
 			} else {
-				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("%s\u2503   ", NRM);
-					printf("%s%s[   %ld]", NRM, STR, root->rec->size);
-					if (colorChecker(root->rec->name) == 2) {
-						printf("%s%s\n", GRN, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 3) {
-						printf("%s%s\n", MAGENTA, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 4) {
-						printf("%s%s\n", RED, root->rec->name);
-					} else {
-						printf("%s%s\n", NRM, root->rec->name);
+				if(root->rec->name[0] != '.') {
+					if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[   %ld]  ", NRM, STR, root->rec->size);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[   %ld]  ", NRM, STR, root->rec->size);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
 					}
 				}
 			}
@@ -164,19 +221,37 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 					printf("%s%s ", BLUE, root->rec->name);
 				}
 			} else {
-				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("%s\u2503   ", NRM);
-					printf("%s%s", NRM, STR);
-					if (colorChecker(root->rec->name) == 2) {
-						printf("%s%s\n", GRN, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 3) {
-						printf("%s%s\n", MAGENTA, root->rec->name);
-					} else if (colorChecker(root->rec->name) == 4) {
-						printf("%s%s\n", RED, root->rec->name);
-					} else {
-						printf("%s%s\n", NRM, root->rec->name);
+				if(root->rec->name[0] != '.') {
+					if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s", NRM, STR);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+						}else {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s", NRM, STR);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+						}
 					}
 				}
 			}
@@ -186,7 +261,7 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
 		    	if (root->pointers[i] != NULL && root->pointers[i]->rec->name[0] != '.')
-				    print_normal(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+				    print_normal(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
     		}
 	}else {
 		printf("%s[%d entries exceeds file limit, not opening dir]\n", NRM, root->rec->num_childs);
@@ -194,7 +269,7 @@ void print_normal(node* root, int indent, int start, int size_toggle, int user_t
 }
 
 // To print the tree with hidden files
-void print_all(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void print_all(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit, int P_toggle, char* pattern) {
 	int i;
 	if (root == NULL)
 		return;
@@ -219,19 +294,37 @@ void print_all(node* root, int indent, int start, int size_toggle, int user_togg
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			printf("%s\u2503   ", NRM);
-                    			printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
-                    			if (colorChecker(root->rec->name) == 2) {
-                        			printf("%s%s\n", GRN, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 3) {
-                        			printf("%s%s\n", MAGENTA, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 4) {
-                        			printf("%s%s\n", RED, root->rec->name);
-                    			} else {
-                        			printf("%s%s\n", NRM, root->rec->name);
-                    			}
+                    			if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[%s\t   %ld]  ", NRM, STR, root->rec->username, root->rec->size);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
+					}
                 		}
             		}	
         	}
@@ -255,19 +348,37 @@ void print_all(node* root, int indent, int start, int size_toggle, int user_togg
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			printf("%s\u2503   ", NRM);
-                    			printf("%s%s[%s\t]  ", NRM, STR, root->rec->username);
-                    			if (colorChecker(root->rec->name) == 2) {
-                        			printf("%s%s\n", GRN, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 3) {
-                        			printf("%s%s\n", MAGENTA, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 4) {
-                        			printf("%s%s\n", RED, root->rec->name);
-                    			} else {
-                        			printf("%s%s\n", NRM, root->rec->name);
-                    			}
+                    			if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[%s\t]", NRM, STR, root->rec->username);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[%s\t]", NRM, STR, root->rec->username);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
+					}
                 		}
             		}	
         	}
@@ -291,19 +402,37 @@ void print_all(node* root, int indent, int start, int size_toggle, int user_togg
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			printf("%s\u2503   ", NRM);
-                    			printf("%s%s[   %ld]", NRM, STR, root->rec->size);
-                    			if (colorChecker(root->rec->name) == 2) {
-                        			printf("%s%s\n", GRN, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 3) {
-                        			printf("%s%s\n", MAGENTA, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 4) {
-                        			printf("%s%s\n", RED, root->rec->name);
-                    			} else {
-                        			printf("%s%s\n", NRM, root->rec->name);
-                    			}
+                    			if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s[   %ld]  ", NRM, STR, root->rec->size);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("%s\u2503   ", NRM);
+						printf("%s%s[   %ld]  ", NRM, STR, root->rec->size);
+						if (colorChecker(root->rec->name) == 2) {
+							printf("%s%s\n", GRN, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 3) {
+							printf("%s%s\n", MAGENTA, root->rec->name);
+						} else if (colorChecker(root->rec->name) == 4) {
+							printf("%s%s\n", RED, root->rec->name);
+						} else {
+							printf("%s%s\n", NRM, root->rec->name);
+						}
+					}
                 		}
             		}	
         	}
@@ -327,19 +456,37 @@ void print_all(node* root, int indent, int start, int size_toggle, int user_togg
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			printf("%s\u2503   ", NRM);
-                    			printf("%s%s", NRM, STR);
-                    			if (colorChecker(root->rec->name) == 2) {
-                        			printf("%s%s\n", GRN, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 3) {
-                        			printf("%s%s\n", MAGENTA, root->rec->name);
-                    			} else if (colorChecker(root->rec->name) == 4) {
-                        			printf("%s%s\n", RED, root->rec->name);
-                    			} else {
-                        			printf("%s%s\n", NRM, root->rec->name);
-                    			}
+                    			if(P_toggle) {
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s", NRM, STR);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+							}
+						}
+						}else {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("%s\u2503   ", NRM);
+							printf("%s%s", NRM, STR);
+							if (colorChecker(root->rec->name) == 2) {
+								printf("%s%s\n", GRN, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 3) {
+								printf("%s%s\n", MAGENTA, root->rec->name);
+							} else if (colorChecker(root->rec->name) == 4) {
+								printf("%s%s\n", RED, root->rec->name);
+							} else {
+								printf("%s%s\n", NRM, root->rec->name);
+						}
+					}
                 		}
             		}
         	}
@@ -348,7 +495,7 @@ void print_all(node* root, int indent, int start, int size_toggle, int user_togg
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
         		if (root->pointers[i] != NULL)
-            			print_all(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+            			print_all(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
     		}
 	}else {
 		printf("%s[%d entries exceeds file limit, not opening dir]\n", NRM, root->rec->num_childs);

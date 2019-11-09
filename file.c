@@ -2,7 +2,7 @@
 #define STR "\u2503 \u0336\u0336\u0336\u0336 \u0336\u0336\u0336\u0336"
 
 // To print the tree into the specified file
-void file_print_normal(FILE* fp, node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void file_print_normal(FILE* fp, node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit, int P_toggle, char* pattern) {
 	int i;
 	if (root == NULL)
 		return;
@@ -26,11 +26,22 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						fprintf(fp, "\u2503   ");
-					fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
-					fprintf(fp, "%s\n", root->rec->name);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
 				}
 			}
 		}
@@ -54,11 +65,22 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						fprintf(fp, "\u2503   ");
-					fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
-					fprintf(fp, "%s\n", root->rec->name);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
 				}
 			}
 		}
@@ -82,11 +104,22 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						fprintf(fp, "\u2503   ");
-					fprintf(fp, "%s[   %ld]", STR, root->rec->size);
-					fprintf(fp, "%s\n", root->rec->name);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[   %ld]  ", STR, root->rec->size);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[   %ld]  ", STR, root->rec->size);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
 				}
 			}
 		}
@@ -110,11 +143,22 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						fprintf(fp, "\u2503   ");
-					fprintf(fp, "%s", STR);
-					fprintf(fp, "%s\n", root->rec->name);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s", STR);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s", STR);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
 				}
 			}
 		}
@@ -123,7 +167,7 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
 		    	if (root->pointers[i] != NULL && root->pointers[i]->rec->name[0] != '.')
-				    file_print_normal(fp, root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+				    file_print_normal(fp, root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
     		}
 	}else {
 		fprintf(fp, "%s[%d entries exceeds file limit, not opening dir]\n", NRM, root->rec->num_childs);
@@ -131,7 +175,7 @@ void file_print_normal(FILE* fp, node* root, int indent, int start, int size_tog
 }
 
 // To print the tree with hidden files in to the specified file
-void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit, int P_toggle, char* pattern) {
 	int i;
 	if (root == NULL)
 		return;
@@ -156,11 +200,22 @@ void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			fprintf(fp, "\u2503   ");
-                    			fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
-                        		fprintf(fp, "%s\n", root->rec->name);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[%s\t   %ld]  ", STR, root->rec->username, root->rec->size);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
                 		}
             		}	
         	}
@@ -184,11 +239,22 @@ void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			fprintf(fp, "\u2503   ");
-                    			fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
-                        		fprintf(fp, "%s\n", root->rec->name);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[%s\t]  ", STR, root->rec->username);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
                 		}
             		}	
         	}
@@ -212,11 +278,22 @@ void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			fprintf(fp, "\u2503   ");
-                    			fprintf(fp, "%s[   %ld]", STR, root->rec->size);
-                        		fprintf(fp, "%s\n", root->rec->name);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s[   %ld]  ", STR, root->rec->size);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s[   %ld]  ", STR, root->rec->size);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
                 		}
             		}	
         	}
@@ -240,11 +317,22 @@ void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-                    			for (i = 0; i < indent; i++)
-                        			fprintf(fp, "\u2503   ");
-                    			fprintf(fp, "%s", STR);
-                        		fprintf(fp, "%s\n", root->rec->name);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								fprintf(fp, "\u2503   ");
+							fprintf(fp, "%s", STR);
+							fprintf(fp, "%s\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							fprintf(fp, "\u2503   ");
+						fprintf(fp, "%s", STR);
+						fprintf(fp, "%s\n", root->rec->name);
+					}
                 		}
             		}
         	}
@@ -253,7 +341,7 @@ void file_print_all(FILE* fp, node* root, int indent, int start, int size_toggle
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
         		if (root->pointers[i] != NULL)
-            			file_print_all(fp, root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+            			file_print_all(fp, root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
     		}
 	}else {
 		fprintf(fp, "[%d entries exceeds file limit, not opening dir]\n", root->rec->num_childs);

@@ -1,6 +1,6 @@
 
 // To print the tree in json format
-void json_print_normal(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void json_print_normal(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit, int P_toggle, char* pattern) {
 	int i, j;
 	if (root == NULL)
 		return;
@@ -23,10 +23,20 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+						}
+					}else {					
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+					}
 				}
 			}
 		}
@@ -49,10 +59,20 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+					}
 				}
 			}
 		}
@@ -75,10 +95,20 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+					}
 				}
 			}
 		}
@@ -101,10 +131,20 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 				}
 			} else {
 				if (root->rec->name[0] != '.') {
-					F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+					if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+					}
 				}
 			}
 		}
@@ -113,7 +153,7 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
 		    	if (root->pointers[i] != NULL && root->pointers[i]->rec->name[0] != '.')
-				    json_print_normal(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+				    json_print_normal(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
 			if(i == root->rec->num_all_childs - 1) {
 				for (j = 0; j < indent; j++)
 					printf("\t");
@@ -126,7 +166,7 @@ void json_print_normal(node* root, int indent, int start, int size_toggle, int u
 }
 
 // To print the tree with hidden files in json format
-void json_print_all(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit) {
+void json_print_all(node* root, int indent, int start, int size_toggle, int user_toggle, int filelimit, int P_toggle, char* pattern) {
 	int i, j;
 	if (root == NULL)
 		return;
@@ -150,10 +190,20 @@ void json_print_all(node* root, int indent, int start, int size_toggle, int user
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+						}
+					}else {					
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->username, root->rec->size);
+					}
                 		}
             		}	
         	}
@@ -176,10 +226,20 @@ void json_print_all(node* root, int indent, int start, int size_toggle, int user
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"user\":\"%s\"},\n", root->rec->name, root->rec->username);
+					}
                 		}
             		}	
         	}
@@ -202,10 +262,20 @@ void json_print_all(node* root, int indent, int start, int size_toggle, int user
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\",\"size\":%ld},\n", root->rec->name, root->rec->size);
+					}
                 		}
             		}	
         	}
@@ -228,10 +298,20 @@ void json_print_all(node* root, int indent, int start, int size_toggle, int user
 				}
             		} else {
                 		if (strcmp(root->rec->name, ".") != 0 && strcmp(root->rec->name, "..") != 0) {
-                    			F++;
-					for (i = 0; i < indent; i++)
-						printf("\t");
-					printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+                    			if (P_toggle)
+					{
+						if(strmatch(root->rec->name, pattern, strlen(root->rec->name), strlen(pattern))) {
+							F++;
+							for (i = 0; i < indent; i++)
+								printf("\t");
+							printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+						}
+					}else {
+						F++;
+						for (i = 0; i < indent; i++)
+							printf("\t");
+						printf("{\"type\":\"file\",\"name\":\"%s\"},\n", root->rec->name);
+					}
                 		}
             		}
         	}
@@ -240,7 +320,7 @@ void json_print_all(node* root, int indent, int start, int size_toggle, int user
 	if(root->rec->num_childs <= filelimit) {
     		for (i = 0; i < root->rec->num_all_childs; i++) {
         		if (root->pointers[i] != NULL)
-            			json_print_all(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit);
+            			json_print_all(root->pointers[i], indent + 1, 0, size_toggle, user_toggle, filelimit, P_toggle, pattern);
 			if(i == root->rec->num_all_childs - 1) {
 				for (j = 0; j < indent; j++)
 					printf("\t");
